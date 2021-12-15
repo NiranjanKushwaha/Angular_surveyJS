@@ -1,0 +1,10 @@
+<div class="survey-container contentcontainer codecontainer">
+  <div id="surveyElement"></div>
+</div>
+<div
+  class="edit bg-dark d-flex justify-content-center my-3"
+  *ngIf="(formFilledData | json) != '{}'"
+>
+  <div><button>Edit</button></div>
+  <div><button>Clear</button></div>
+</div>
