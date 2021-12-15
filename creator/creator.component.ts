@@ -4,6 +4,7 @@ import '../../../node_modules/bootstrap/dist/css/bootstrap.css';
 // import 'bootstrap/dist/css/bootstrap.css';
 import 'survey-angular/survey.css';
 import { creatorObjType } from './obj.config';
+import { json } from './jsonContainer';
 
 Survey.StylesManager.applyTheme('bootstrap');
 @Component({
@@ -13,10 +14,12 @@ Survey.StylesManager.applyTheme('bootstrap');
 })
 export class CreatorComponent implements OnInit {
   formFilledData: any;
+  checkboxAnswers: string[] = [];
   constructor() {
     this.formFilledData = localStorage.getItem('Survey_Data')
       ? JSON.parse(localStorage.getItem('Survey_Data') as string)
       : {};
+    // console.log(JSON.parse(json));
   }
 
   ngOnInit(): void {
@@ -250,9 +253,10 @@ export class CreatorComponent implements OnInit {
             Array.isArray(this.formFilledData[el.name])
           ) {
             el.choices.map((choice) => {
-              if (choice.value === this.formFilledData[el.name]) {
-                el['defaultValue'] = [...choice.value];
+              if (this.formFilledData[el.name].includes(choice.value)) {
+                this.checkboxAnswers.push(choice.value);
               }
+              el['defaultValue'] = this.checkboxAnswers;
             });
           } else {
             el.choices.map((choice) => {
@@ -264,7 +268,6 @@ export class CreatorComponent implements OnInit {
         }
       });
     }
-    console.log(json);
     const survey = new Survey.Model(json);
     Survey.SurveyNG.render('surveyElement', { model: survey });
     survey.onComplete.add(function (sender) {
